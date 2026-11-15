@@ -17,6 +17,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,11 +67,11 @@ public final class MainActivity extends Activity implements BleClient.Listener {
         super.onCreate(savedInstanceState);
         LinearLayout root = new LinearLayout(this); root.setOrientation(LinearLayout.VERTICAL);
         root.setFitsSystemWindows(true);
+        root.setPadding(dp(18), dp(18), dp(18), dp(18));
         ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true); scroll.addView(root);
         setContentView(scroll);
 
-        chasterPanel = column(root);
-        chasterPanel.addView(text("Session Chaster"));
+        chasterPanel = section(root, "Chaster");
         chasterStatus = text("Connexion Chaster en cours…"); chasterPanel.addView(chasterStatus);
         chasterRefresh = button(chasterPanel, "Actualiser Chaster", this::refreshChaster);
         createLockButton = button(chasterPanel, "Créer un verrou Chaster", this::showCreateLockDialog);
@@ -78,10 +81,8 @@ public final class MainActivity extends Activity implements BleClient.Listener {
         offerButton = button(chasterPanel, "Offrir la session", this::offerSession);
         offerButton.setVisibility(View.GONE);
 
-        root.addView(text("Serrure Bluetooth"));
-        root.addView(text("La connexion ne révèle pas l'état ouvert/fermé. Vérifiez la serrure physiquement après une commande."));
-        root.addView(text("État mécanique : inconnu (non lisible par ce protocole)"));
-        disconnectedPanel = column(root);
+        LinearLayout boxPanel = section(root, "Boîte à clés");
+        disconnectedPanel = column(boxPanel);
         status = text("Déconnecté"); disconnectedPanel.addView(status);
         selection = text("Aucune serrure sélectionnée"); disconnectedPanel.addView(selection);
 
@@ -99,7 +100,7 @@ public final class MainActivity extends Activity implements BleClient.Listener {
         });
         connectButton.setVisibility(View.GONE);
 
-        connectedPanel = column(root); connectedPanel.setVisibility(View.GONE);
+        connectedPanel = column(boxPanel); connectedPanel.setVisibility(View.GONE);
         connectedStatus = text("Connecté"); connectedPanel.addView(connectedStatus);
         connectedSelection = text(""); connectedPanel.addView(connectedSelection);
         battery = text("Batterie : en attente"); connectedPanel.addView(battery);
@@ -197,7 +198,7 @@ public final class MainActivity extends Activity implements BleClient.Listener {
         else if (!lock.canViewTime || lock.endDate.isEmpty()) state = "Verrouillé · durée restante masquée par Chaster.";
         else state = "Verrouillé · fin prévue " + formatRemaining(lock.endDate) + ".";
         if (lock.frozen) state = "Verrouillé · session gelée.";
-        chasterStatus.setText(lock.title + "\n" + state + "\nLa commande BLE ne confirme pas l'état mécanique.");
+        chasterStatus.setText(lock.title + "\n" + state);
         if (!keyholderInput.hasFocus() && lock.keyholder != null && !lock.keyholder.isEmpty()) keyholderInput.setText(lock.keyholder);
         if ("locked".equals(lock.status) && lock.canViewTime && !lock.endDate.isEmpty())
             main.postDelayed(chasterTicker, 60_000);
@@ -211,7 +212,7 @@ public final class MainActivity extends Activity implements BleClient.Listener {
         code.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
         form.addView(min); form.addView(max); form.addView(code);
         new AlertDialog.Builder(this).setTitle("Créer un verrou Chaster")
-                .setMessage("La session Chaster n'activera pas le verrouillage matériel de la serrure Bluetooth.")
+                .setMessage("Le verrou Chaster et le verrouillage de la boîte sont indépendants.")
                 .setView(form).setNegativeButton("Annuler", null)
                 .setPositiveButton("Créer", (dialog, which) -> {
                     try {
@@ -301,7 +302,7 @@ public final class MainActivity extends Activity implements BleClient.Listener {
                     pendingUnlockCommand = pendingUnlockLockId == null ? null : open.clone();
                     openCheckPending = pendingUnlockCommand != null;
                     if (!command(open)) { pendingUnlockLockId = null; pendingUnlockCommand = null; openCheckPending = false; }
-                    chasterStatus.append("\nCommande BLE envoyée ; résultat mécanique non confirmé.");
+                    chasterStatus.append("\nOrdre d'ouverture envoyé.");
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> { openCheckPending = false; chasterStatus.setText("Vérification Chaster impossible : " + safeMessage(e) + " · ouverture refusée"); });
@@ -368,6 +369,25 @@ public final class MainActivity extends Activity implements BleClient.Listener {
     }
 
     private TextView text(String value) { TextView t = new TextView(this); t.setText(value); return t; }
+    private LinearLayout section(LinearLayout parent, String title) {
+        LinearLayout section = column(parent);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) section.getLayoutParams();
+        params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        params.bottomMargin = dp(16);
+        section.setLayoutParams(params);
+        GradientDrawable background = new GradientDrawable();
+        background.setColor(Color.rgb(247, 248, 250)); background.setCornerRadius(dp(14));
+        section.setBackground(background); section.setPadding(dp(16), dp(12), dp(16), dp(12));
+        TextView heading = text(title); heading.setTextSize(19); heading.setTypeface(null, Typeface.BOLD);
+        LinearLayout.LayoutParams headingParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        headingParams.bottomMargin = dp(8); section.addView(heading, 0, headingParams);
+        return section;
+    }
+
+    private int dp(float value) { return (int) (value * getResources().getDisplayMetrics().density + 0.5f); }
+
     private LinearLayout column(LinearLayout parent) {
         LinearLayout c = new LinearLayout(this); c.setOrientation(LinearLayout.VERTICAL); parent.addView(c); return c;
     }

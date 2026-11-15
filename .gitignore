@@ -1,0 +1,25 @@
+.codex
+_build
+notes/AGENTS-web-server.md
+notes/GENERATE-MLI.md
+notes/COVER-TESTS.md
+AGENTS.md
+scripts
+
+# Analyse locale : outils, sources décompilées et captures privées.
+/analysis/
+# Conserver uniquement le script de reproduction de l'analyse.
+!scripts/
+/scripts/*
+!/scripts/analyse-apk.sh
+
+# Projet Android Java autonome : configurations locales et artefacts.
+/android-test/.local/
+/android-test/.gradle/
+/android-test/local.properties
+/android-test/config.json
+/android-test/**/build/
+
+# Personal Chaster developer credential; never commit or package it.
+/chaster.jeton
+

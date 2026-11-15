@@ -1,0 +1,29 @@
+plugins { id 'com.android.application' }
+
+def config = new groovy.json.JsonSlurper().parse(rootProject.file('config.json'))
+['compile_sdk', 'target_sdk', 'min_sdk'].each { key ->
+    if (!(config[key] instanceof Integer)) throw new GradleException("Définir l'entier ${key} dans config.json ; aucun fallback.")
+}
+if (!(config.build_tools instanceof String) || config.build_tools.trim().isEmpty())
+    throw new GradleException('Définir build_tools dans config.json ; aucun fallback.')
+if (config.min_sdk < 21 || config.target_sdk > config.compile_sdk || config.min_sdk > config.target_sdk)
+    throw new GradleException('SDK incompatibles : minimum >= 21, minimum <= cible <= compilation.')
+
+android {
+    namespace 'com.test.test.test'
+    compileSdk config.compile_sdk
+    buildToolsVersion config.build_tools
+    defaultConfig {
+        applicationId 'com.test.test.test'
+        minSdk config.min_sdk
+        targetSdk config.target_sdk
+        versionCode 1
+        versionName '0.1'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lint { abortOnError true }
+}
+dependencies { testImplementation 'junit:junit:4.13.2' }

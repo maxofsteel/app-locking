@@ -1,0 +1,18 @@
+pluginManagement {
+    def configFile = file('config.json')
+    if (!configFile.isFile()) {
+        throw new GradleException('Configuration requise : définir android-test/config.json à partir de config.example.json (voir README.md).')
+    }
+    def config = new groovy.json.JsonSlurper().parse(configFile)
+    if (!(config.android_gradle_plugin instanceof String) || config.android_gradle_plugin.trim().isEmpty()) {
+        throw new GradleException('Définir android_gradle_plugin dans config.json ; aucun fallback.')
+    }
+    repositories { google(); mavenCentral(); gradlePluginPortal() }
+    plugins { id 'com.android.application' version config.android_gradle_plugin }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories { google(); mavenCentral() }
+}
+rootProject.name = 'BluetoothTest'
+include ':app'

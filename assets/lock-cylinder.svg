@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#777e80"/>
+      <stop offset=".16" stop-color="#fdfdfb"/>
+      <stop offset=".32" stop-color="#b5b9b8"/>
+      <stop offset=".48" stop-color="#ffffff"/>
+      <stop offset=".67" stop-color="#c5c9c8"/>
+      <stop offset=".82" stop-color="#f8f8f5"/>
+      <stop offset="1" stop-color="#777e80"/>
+    </linearGradient>
+    <linearGradient id="blade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#aeb3b3"/>
+      <stop offset=".22" stop-color="#ffffff"/>
+      <stop offset=".47" stop-color="#c6c9c8"/>
+      <stop offset=".64" stop-color="#fdfdfb"/>
+      <stop offset="1" stop-color="#92999a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8e4a2"/>
+      <stop offset=".16" stop-color="#d7b65f"/>
+      <stop offset=".38" stop-color="#fff0aa"/>
+      <stop offset=".61" stop-color="#c49440"/>
+      <stop offset=".82" stop-color="#f2d27d"/>
+      <stop offset="1" stop-color="#8d672f"/>
+    </linearGradient>
+    <linearGradient id="goldFace" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe9a0"/>
+      <stop offset=".48" stop-color="#d0a448"/>
+      <stop offset="1" stop-color="#89612b"/>
+    </linearGradient>
+    <linearGradient id="keyring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#61696a"/>
+      <stop offset=".18" stop-color="#ffffff"/>
+      <stop offset=".37" stop-color="#989f9f"/>
+      <stop offset=".56" stop-color="#ffffff"/>
+      <stop offset=".79" stop-color="#aeb3b3"/>
+      <stop offset="1" stop-color="#596162"/>
+    </linearGradient>
+    <pattern id="knurl" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r=".8" fill="#778080" opacity=".42"/>
+      <circle cx="6" cy="6" r=".8" fill="#ffffff" opacity=".8"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="150%" height="160%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <clipPath id="headClip">
+      <path d="M91 157 126 105Q136 91 153 88L210 83Q227 82 239 97L275 139Q286 152 280 170L267 211 284 241Q291 256 278 269L246 297 211 287 183 309 151 290 121 300 105 270 88 238 72 208 75 180Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="512" height="512" rx="88" fill="#fbfaf7"/>
+  <rect x="14" y="14" width="484" height="484" rx="76" fill="none" stroke="#ece9e1" stroke-width="2"/>
+
+  <g id="artwork">
+  <ellipse cx="230" cy="387" rx="151" ry="23" fill="#66635c" opacity=".14" filter="url(#shadow)"/>
+  <ellipse cx="387" cy="240" rx="61" ry="15" transform="rotate(58 387 240)" fill="#6e552b" opacity=".2" filter="url(#shadow)"/>
+
+  <!-- A steel split ring passes through the large key bow. -->
+  <ellipse cx="98" cy="83" rx="87" ry="43" transform="rotate(39 98 83)"
+    fill="none" stroke="#606768" stroke-width="15"/>
+  <ellipse cx="98" cy="83" rx="87" ry="43" transform="rotate(39 98 83)"
+    fill="none" stroke="url(#keyring)" stroke-width="10"/>
+  <path d="M32 34A82 39 0 0 1 151 55" fill="none" stroke="#ffffff" stroke-width="3" opacity=".9"/>
+
+  <!-- Second key sits behind the large-headed key; its narrow blade has deep cuts. -->
+  <path d="M127 244 157 231 174 253 206 448Q209 461 199 468L187 466 180 450 169 453 165 433 176 428 173 411 161 417 157 395 168 390 165 374 151 379Z"
+    fill="url(#blade)" stroke="#7b8283" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M140 256 159 249 185 409" fill="none" stroke="#ffffff" stroke-width="4" opacity=".82"/>
+  <path d="M167 382 177 378M169 398 180 394M174 427 184 424" fill="none" stroke="#697172" stroke-width="4"/>
+  <path d="M169 382 179 378M171 398 182 394M176 427 186 424" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+
+  <!-- Octagonal key bow, stippled like the stamped head in the reference. -->
+  <path d="M91 157 126 105Q136 91 153 88L210 83Q227 82 239 97L275 139Q286 152 280 170L267 211 284 241Q291 256 278 269L246 297 211 287 183 309 151 290 121 300 105 270 88 238 72 208 75 180Z"
+    fill="url(#chrome)" stroke="#737a7b" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="66" y="78" width="230" height="238" fill="url(#knurl)" clip-path="url(#headClip)" opacity=".82"/>
+  <path d="M101 157 133 111Q141 99 155 97L207 92Q222 91 233 105L267 146Q276 157 270 173L255 211 273 242Q278 252 269 261L244 284 211 276 183 298 153 279 126 289 113 264 97 235 82 206 84 182Z"
+    fill="none" stroke="#ffffff" stroke-width="2.5" opacity=".82" stroke-linejoin="round"/>
+
+  <!-- Ring eyelet and the raised, pale maker's plate. -->
+  <circle cx="156" cy="142" r="19" fill="url(#chrome)" stroke="#747b7b" stroke-width="4"/>
+  <circle cx="156" cy="142" r="10" fill="#fbfaf7" stroke="#818888" stroke-width="3"/>
+  <path d="M180 160 239 131Q250 126 257 135L267 151Q272 160 261 166L202 195Q191 200 185 190L176 176Q172 166 180 160Z"
+    fill="url(#chrome)" stroke="#8a9090" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M184 163 238 138Q247 134 252 140L257 148 193 179Z" fill="#ffffff" opacity=".78"/>
+
+  <!-- Main double-sided key blade, with a shoulder and milled teeth near its tip. -->
+  <path d="M227 265 266 240 285 267 390 407Q398 419 389 429L378 431 363 414 350 423 336 405 348 394 337 379 323 389 309 370 322 358 309 340 294 350 280 331 292 319 277 299 253 313 238 294Z"
+    fill="url(#blade)" stroke="#747b7c" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M244 274 272 257 366 387" fill="none" stroke="#ffffff" stroke-width="5" opacity=".88"/>
+  <path d="M272 293 296 326M285 284 309 317" fill="none" stroke="#8a9191" stroke-width="2.5" opacity=".7"/>
+  <path d="M309 340 321 331M323 359 336 350M337 379 350 369M350 397 364 387M365 414 378 403"
+    fill="none" stroke="#687071" stroke-width="4"/>
+  <path d="M311 337 322 329M325 356 337 348M339 376 351 367M352 394 365 385M367 411 379 401"
+    fill="none" stroke="#ffffff" stroke-width="1.4" opacity=".9"/>
+
+  <!-- Compact brass euro-profile cylinder with a stepped cam at the rear. -->
+  <g transform="translate(306 91) rotate(58)">
+    <!-- Main barrel, with rounded shoulders and machined longitudinal highlights. -->
+    <path d="M2-28Q2-36 11-36H130Q140-36 145-27L157-12V12L145 27Q140 36 130 36H11Q2 36 2 28Z"
+      fill="url(#gold)" stroke="#8d692f" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M9-29H126Q135-29 140-22L147-12H12Z" fill="#fff1b2" opacity=".78"/>
+    <path d="M13-21H135" stroke="#fff8d7" stroke-width="3" opacity=".72"/>
+    <path d="M12 23H132Q140 23 145 16" fill="none" stroke="#805b2b" stroke-width="4" opacity=".58"/>
+    <path d="M22 30H127" stroke="#f9df94" stroke-width="2" opacity=".72"/>
+
+    <!-- Narrow collar around the plug and its fixing screw. -->
+    <path d="M92-37H108L117-28V28L108 37H92Z" fill="url(#goldFace)" stroke="#8b652d" stroke-width="3"/>
+    <ellipse cx="101" cy="0" rx="5" ry="10" fill="#805c2a"/>
+    <path d="M99-5v10" stroke="#f7dc91" stroke-width="2"/>
+
+    <!-- The distinctive offset Euro-profile nose and keyway. -->
+    <path d="M139-27 160-22Q172-18 172-7V1Q172 11 162 16L153 20 162 34Q165 41 159 45L145 51 128 34 136 19 130 10V-15Z"
+      fill="url(#goldFace)" stroke="#86602b" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M143-20 158-16Q166-13 166-6" fill="none" stroke="#fff0b0" stroke-width="3" opacity=".88"/>
+    <path d="M151 8 140 19 152 34" fill="none" stroke="#f5d47f" stroke-width="6"/>
+    <path d="M153 8 143 19 154 31" fill="none" stroke="#7b592a" stroke-width="2.5"/>
+    <circle cx="159" cy="-2" r="5" fill="#72552e"/>
+  </g>
+  </g>
+</svg>

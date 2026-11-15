@@ -12,6 +12,7 @@ scripts
 !scripts/
 /scripts/*
 !/scripts/analyse-apk.sh
+!/scripts/generate-android-icons.sh
 
 # Projet Android Java autonome : configurations locales et artefacts.
 /android-test/.local/

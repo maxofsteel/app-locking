@@ -23,6 +23,10 @@ La Public API Chaster ne transforme pas une serrure BLE générique en méthode 
 
 Les versions Android Gradle Plugin, SDK de compilation/cible/minimale et Build Tools sont à définir explicitement dans `android-test/config.json`, à partir de [`android-test/config.example.json`](android-test/config.example.json). Définir aussi `sdk.dir` dans `android-test/local.properties`. Ces fichiers locaux sont ignorés par Git. La configuration détaillée et les instructions de compilation sont dans [`android-test/README.md`](android-test/README.md).
 
+L'icône est dessinée dans [`assets/lock-cylinder.svg`](assets/lock-cylinder.svg). Après modification du dessin, générer les calques adaptatifs, les PNG legacy et les aperçus avec `bash scripts/generate-android-icons.sh` (Inkscape et ImageMagick requis), puis compiler. Android et les lanceurs des fabricants appliquent leur propre masque; l'application ne peut pas le désactiver. Les icônes adaptatives gardent l'illustration dans la zone sûre centrale et remplissent le fond, tandis que les PNG legacy ciblent les anciennes versions.
+
+L'aperçu carré est [`assets/lock-cylinder-preview.png`](assets/lock-cylinder-preview.png); l'aperçu avec un masque circulaire est [`assets/lock-cylinder-adaptive-preview.png`](assets/lock-cylinder-adaptive-preview.png). Le générateur utilise Inkscape pour exporter le groupe SVG séparément et ImageMagick pour le centrer dans la zone sûre; cette approche garde un SVG unique au lieu de dupliquer les tracés de l'illustration.
+
 Depuis la racine du dépôt, après configuration :
 
 ```sh

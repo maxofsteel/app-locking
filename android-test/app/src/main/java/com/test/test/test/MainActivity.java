@@ -206,24 +206,48 @@ public final class MainActivity extends Activity implements BleClient.Listener {
 
     private void showCreateLockDialog() {
         LinearLayout form = new LinearLayout(this); form.setOrientation(LinearLayout.VERTICAL);
-        EditText min = field("Durée minimale (minutes)");
-        EditText max = field("Durée maximale (minutes)");
+        EditText min = field("Durée minimale (jours)");
+        EditText max = field("Durée maximale (jours)");
         EditText code = field("Code de combinaison à conserver pour la boîte");
         code.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        String boxName = profile != null ? profile.bleName : preferences.getString("name", "");
+        code.setText(boxName);
+        code.setSelection(code.length());
         form.addView(min); form.addView(max); form.addView(code);
         new AlertDialog.Builder(this).setTitle("Créer un verrou Chaster")
                 .setMessage("Le verrou Chaster et le verrouillage de la boîte sont indépendants.")
                 .setView(form).setNegativeButton("Annuler", null)
                 .setPositiveButton("Créer", (dialog, which) -> {
                     try {
-                        long minSeconds = Math.multiplyExact(Long.parseLong(min.getText().toString().trim()), 60L);
-                        long maxSeconds = Math.multiplyExact(Long.parseLong(max.getText().toString().trim()), 60L);
+                        long minSeconds = Math.multiplyExact(Long.parseLong(min.getText().toString().trim()), 86_400L);
+                        long maxSeconds = Math.multiplyExact(Long.parseLong(max.getText().toString().trim()), 86_400L);
                         String combination = code.getText().toString().trim();
                         if (minSeconds < 0 || maxSeconds <= 0 || minSeconds > maxSeconds || combination.isEmpty())
                             throw new IllegalArgumentException("Durées invalides ou code manquant.");
-                        createLock(minSeconds, maxSeconds, combination);
+                        confirmCreateLock(minSeconds / 86_400L, maxSeconds / 86_400L,
+                                minSeconds, maxSeconds, combination);
                     } catch (Exception e) { Toast.makeText(this, safeMessage(e), Toast.LENGTH_LONG).show(); }
                 }).show();
+    }
+
+    private void confirmCreateLock(long minDays, long maxDays, long minSeconds, long maxSeconds, String combination) {
+        String duration = minDays == maxDays
+                ? formatDays(minDays)
+                : formatDays(minDays) + " à " + formatDays(maxDays);
+        new AlertDialog.Builder(this).setTitle("Confirmer la durée")
+                .setMessage("Chaster choisira au hasard la durée initiale dans cette plage :\n" + duration
+                        + "\n\nVérifie bien les jours avant de créer le verrou.")
+                .setNegativeButton("Modifier", null)
+                .setPositiveButton("Créer le verrou", (dialog, which) -> createLock(minSeconds, maxSeconds, combination))
+                .show();
+    }
+
+    private static String formatDays(long days) {
+        String count = java.text.NumberFormat.getIntegerInstance(java.util.Locale.FRANCE).format(days);
+        if (days < 365) return count + " jours";
+        java.text.NumberFormat years = java.text.NumberFormat.getNumberInstance(java.util.Locale.FRANCE);
+        years.setMaximumFractionDigits(1);
+        return count + " jours (≈ " + years.format(days / 365.2425) + " ans)";
     }
 
     private EditText field(String hint) {
@@ -233,7 +257,7 @@ public final class MainActivity extends Activity implements BleClient.Listener {
     }
 
     private void createLock(long minSeconds, long maxSeconds, String combination) {
-        chasterStatus.setText("Création du verrou Chaster de test…"); createLockButton.setEnabled(false);
+        chasterStatus.setText("Création du verrou Chaster…"); createLockButton.setEnabled(false);
         chasterWorker.execute(() -> {
             try {
                 ChasterLock created = new ChasterApi(chasterToken).createLock(minSeconds, maxSeconds, combination);

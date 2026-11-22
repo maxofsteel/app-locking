@@ -36,6 +36,10 @@ public final class ChasterApi {
         request("POST", "/locks/" + segment(id) + "/unlock", null);
     }
 
+    public void archive(String id) throws Exception {
+        request("POST", "/locks/" + segment(id) + "/archive", null);
+    }
+
     public ChasterLock createLock(long minSeconds, long maxSeconds, String combination) throws Exception {
         JSONObject code = new JSONObject(); code.put("code", combination);
         Object codeResult = request("POST", "/combinations/code", code);

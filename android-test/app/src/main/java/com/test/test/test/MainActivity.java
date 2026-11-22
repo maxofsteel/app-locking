@@ -321,7 +321,7 @@ public final class MainActivity extends Activity implements BleClient.Listener {
                 runOnUiThread(() -> {
                     showChasterLock(fresh);
                     if (!ble.isReady()) { openCheckPending = false; chasterStatus.append("\nConnexion Bluetooth perdue : ouverture refusée."); return; }
-                    pendingUnlockLockId = "locked".equals(fresh.status) ? fresh.id : null;
+                    pendingUnlockLockId = fresh.permitsOpening() ? fresh.id : null;
                     byte[] open = Protocol.lock(profile, false);
                     pendingUnlockCommand = pendingUnlockLockId == null ? null : open.clone();
                     openCheckPending = pendingUnlockCommand != null;
@@ -338,9 +338,28 @@ public final class MainActivity extends Activity implements BleClient.Listener {
         if (lockId == null || chasterToken == null) return;
         chasterWorker.execute(() -> {
             try {
-                new ChasterApi(chasterToken).unlock(lockId);
-                ChasterLock latest = new ChasterApi(chasterToken).refresh(lockId);
-                runOnUiThread(() -> showChasterLock(latest));
+                ChasterApi api = new ChasterApi(chasterToken);
+                ChasterLock latest = api.refresh(lockId);
+                if ("locked".equals(latest.status)) {
+                    api.unlock(lockId);
+                    latest = api.refresh(lockId);
+                }
+                if (!"unlocked".equals(latest.status)) {
+                    ChasterLock notUnlocked = latest;
+                    runOnUiThread(() -> {
+                        activeLock = notUnlocked;
+                        showChasterLock(notUnlocked);
+                        chasterStatus.append("\nChaster n'indique pas encore le verrou comme terminé ; il n'a pas été archivé.");
+                    });
+                    return;
+                }
+                api.archive(lockId);
+                runOnUiThread(() -> {
+                    activeLock = null;
+                    main.removeCallbacks(chasterTicker);
+                    chasterStatus.setText("Verrou Chaster terminé et archivé. Vous pouvez en créer un nouveau.");
+                    createLockButton.setEnabled(true);
+                });
             } catch (Exception e) {
                 runOnUiThread(() -> chasterStatus.setText("BLE a accepté l'écriture, mais clôture Chaster à synchroniser : " + safeMessage(e)));
             }

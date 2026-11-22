@@ -4,9 +4,7 @@ Projet de contrôle local d'une serrure connectée Android. Le dépôt rassemble
 
 ## État du projet
 
-Le code Android actuellement compilable est dans [`android-test/`](android-test/). C'est une application Java de test, package `com.test.test.test`. Elle n'utilise pas encore OCaml ni `android-ocaml-lib`.
-
-L'application OCaml envisagée, le switch opam `android` et l'intégration de `android-ocaml-lib` ne sont pas encore présents dans ce dépôt : il n'y a ni `dune-project`, ni fichiers `dune`, ni paquet `.opam`. Les instructions de développement OCaml dans [`AGENTS.md`](AGENTS.md) décrivent la cible du projet, pas l'application Java actuelle.
+Le code Android actuellement compilable est dans [`android-test/`](android-test/). C'est une application Java de test, package `com.test.test.test`.
 
 ## Fonctionnalités du APK de test
 
@@ -61,7 +59,5 @@ Le script refuse les chemins hors workspace et une sortie qui existe déjà. Les
 
 - [`chaster.md`](chaster.md) : conception et limites de l'intégration Chaster.
 - [`PROJECT_MAP.md`](PROJECT_MAP.md) : carte initiale du dépôt et état de l'architecture OCaml prévue.
-- [`notes/RESUME.md`](notes/RESUME.md) : résumé des travaux d'analyse.
-- [`notes/AGENTS-web-server.md`](notes/AGENTS-web-server.md) : règles à consulter avant tout travail sur un serveur.
 
 Les conclusions issues de l'APK sont des observations statiques, pas des garanties de compatibilité matérielle. Le protocole n'a pas été confirmé sur la serrure réelle.
